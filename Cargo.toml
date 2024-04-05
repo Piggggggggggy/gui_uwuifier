@@ -1,0 +1,11 @@
+[package]
+name = "gui_uwuify"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+eframe = "*"
+uwuify = "0.2.2"
+arboard = "3.3.2"
