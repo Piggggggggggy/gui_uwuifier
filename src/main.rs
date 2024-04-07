@@ -4,7 +4,7 @@ use std::{borrow::BorrowMut, ops::RangeBounds};
 
 use arboard::Clipboard;
 use eframe::{
-    egui::{self, Layout, Widget},
+    egui::{self, style::Spacing, Layout, Rounding, Widget},
     epaint::vec2,
 };
 use regex::Regex;
@@ -107,19 +107,16 @@ impl MyApp {
 }
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        let default_button = |e: &str| egui::Button::new(e).min_size(vec2(20.0, 30.0));
-        egui::CentralPanel::default().show(ctx, |ui| {
-            // main vertical layout
-            ui.vertical(|ui| {
-                let (_id, rect) = ui.allocate_space(vec2(ui.available_width(), 30.0));
-                // text
-                ui.add_sized(
-                    ui.available_size(),
-                    egui::TextEdit::multiline(&mut self.text),
-                );
-
-                // control buttons
-                ui.put(rect, |ui: &mut egui::Ui| {
+        let default_button = |e: &str| {
+            egui::Button::new(e)
+                .min_size(vec2(70.0, 40.0))
+                .rounding(Rounding::ZERO)
+        };
+        egui::TopBottomPanel::top("menu_bar")
+            .min_height(40.0)
+            .show(ctx, |ui| {
+                egui::menu::bar(ui, |ui| {
+                    ui.style_mut().spacing.item_spacing.x = 0.0;
                     ui.horizontal(|ui: &mut egui::Ui| {
                         if default_button("uwuify").ui(ui).clicked() {
                             self.uwuify();
@@ -143,7 +140,12 @@ impl eframe::App for MyApp {
                     .response
                 });
             });
-
+        egui::CentralPanel::default().show(ctx, |ui| {
+            // main vertical layout
+            ui.add_sized(
+                ui.available_size(),
+                egui::TextEdit::multiline(&mut self.text),
+            );
             // drag and drop text files
             ctx.input(|i| {
                 if !i.raw.dropped_files.is_empty() {
