@@ -1,5 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use std::ops::RangeBounds;
+use std::{borrow::BorrowMut, ops::RangeBounds};
 
 use arboard::Clipboard;
 use eframe::{
@@ -53,6 +53,28 @@ impl MyApp {
         }
     }
 
+    fn sarcasm(&mut self) {
+        let invert_case = |c: char| -> char {
+            if c.is_uppercase() {
+                c.to_lowercase().next().unwrap()
+            } else {
+                c.to_uppercase().next().unwrap()
+            }
+        };
+        let result = self
+            .text
+            .chars()
+            .map(|c| {
+                if rand::random::<bool>() {
+                    invert_case(c)
+                } else {
+                    c
+                }
+            })
+            .collect::<String>();
+        self.text = result;
+    }
+
     fn uwuify(&mut self) {
         let b = &self.text;
         // filter out urls
@@ -100,6 +122,9 @@ impl eframe::App for MyApp {
                     ui.horizontal(|ui: &mut egui::Ui| {
                         if default_button("uwuify").ui(ui).clicked() {
                             self.uwuify();
+                        }
+                        if default_button("sarcasm").ui(ui).clicked() {
+                            self.sarcasm();
                         }
                         ui.allocate_ui_with_layout(
                             ui.available_size(),
