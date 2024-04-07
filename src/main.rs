@@ -2,10 +2,10 @@
 
 use arboard::Clipboard;
 use eframe::{
-    egui::{self, style::Spacing, Color32, FontFamily, FontId, Layout, Rounding, Widget},
+    egui::{self, Color32, FontFamily, FontId, Layout, Rounding, Widget},
     epaint::vec2,
 };
-use uwuifier::{round_up16, uwuify_sse, uwuify_str_sse};
+use uwuifier::{round_up16, uwuify_sse};
 
 fn main() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions {
