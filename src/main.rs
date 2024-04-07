@@ -1,13 +1,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use rand;
-use std::{borrow::BorrowMut, ops::RangeBounds};
 
 use arboard::Clipboard;
 use eframe::{
-    egui::{self, style::Spacing, Layout, Rounding, Widget},
+    egui::{self, style::Spacing, Color32, FontFamily, FontId, Layout, Rounding, Widget},
     epaint::vec2,
 };
-use regex::Regex;
 use uwuifier::{round_up16, uwuify_sse, uwuify_str_sse};
 
 fn main() -> Result<(), eframe::Error> {
@@ -36,6 +33,12 @@ struct MyApp {
 }
 impl MyApp {
     fn new(_cc: &eframe::CreationContext, provider: Clipboard) -> Box<Self> {
+        let mut style = egui::Style::default();
+        style.visuals.extreme_bg_color = Color32::from_hex("#0c0c0d").unwrap();
+        style.visuals.override_text_color = Some(Color32::from_hex("#eef9ff").unwrap());
+        style.visuals.panel_fill = Color32::from_hex("#0c0c0d").unwrap();
+        _cc.egui_ctx.set_style(style);
+
         Box::new(Self {
             text: String::new(),
             clipboard_provider: provider,
@@ -144,7 +147,8 @@ impl eframe::App for MyApp {
             // main vertical layout
             ui.add_sized(
                 ui.available_size(),
-                egui::TextEdit::multiline(&mut self.text),
+                egui::TextEdit::multiline(&mut self.text)
+                    .font(FontId::new(14.0, FontFamily::Proportional)),
             );
             // drag and drop text files
             ctx.input(|i| {
