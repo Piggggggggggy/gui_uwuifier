@@ -20,7 +20,12 @@ fn main() -> Result<(), eframe::Error> {
     eframe::run_native(
         "Uwu",
         options,
-        Box::new(|cc| MyApp::new(cc, Clipboard::new().unwrap())),
+        Box::new(|cc| {
+            MyApp::new(
+                cc,
+                Clipboard::new().expect("could not get clipboard provider"),
+            )
+        }),
     )
 }
 
@@ -37,7 +42,9 @@ impl MyApp {
     }
 
     fn copy(&mut self) {
-        self.clipboard_provider.set_text(self.text.clone()).unwrap();
+        self.clipboard_provider
+            .set_text(self.text.clone())
+            .expect("failed to set clipboard");
     }
 
     fn paste(&mut self) {
@@ -114,7 +121,14 @@ impl eframe::App for MyApp {
             // drag and drop text files
             ctx.input(|i| {
                 if !i.raw.dropped_files.is_empty() {
-                    if let Some(path) = &i.raw.dropped_files.clone().first().unwrap().path {
+                    if let Some(path) = &i
+                        .raw
+                        .dropped_files
+                        .clone()
+                        .first()
+                        .expect("should never fail")
+                        .path
+                    {
                         if let Ok(contents) = std::fs::read_to_string(path) {
                             self.text = contents;
                         }
