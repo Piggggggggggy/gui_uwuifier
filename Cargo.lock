@@ -1459,6 +1459,7 @@ version = "0.1.0"
 dependencies = [
  "arboard",
  "eframe",
+ "regex",
  "uwuify",
 ]
 
