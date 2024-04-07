@@ -1,4 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+use rand;
 use std::{borrow::BorrowMut, ops::RangeBounds};
 
 use arboard::Clipboard;
